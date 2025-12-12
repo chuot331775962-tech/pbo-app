@@ -3,7 +3,7 @@ name: Build Android APK
 on:
   workflow_dispatch:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -53,21 +53,3 @@ jobs:
       with:
         name: app-green-release
         path: android/app/build/outputs/apk/green/release/app-green-release.apk
-    
-    - name: Upload APK Red
-      uses: actions/upload-artifact@v3
-      with:
-        name: app-red-release
-        path: android/app/build/outputs/apk/red/release/app-red-release.apk
-    
-    - name: Upload APK Purple
-      uses: actions/upload-artifact@v3
-      with:
-        name: app-purple-release
-        path: android/app/build/outputs/apk/purple/release/app-purple-release.apk
-    
-    - name: Upload APK Orange
-      uses: actions/upload-artifact@v3
-      with:
-        name: app-orange-release
-        path: android/app/build/outputs/apk/orange/release/app-orange-release.apk
