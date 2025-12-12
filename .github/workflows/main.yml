@@ -3,14 +3,18 @@ name: Build Android APK
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     
+    permissions:
+      contents: write
+    
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
     
     - name: Set up JDK 11
       uses: actions/setup-java@v3
@@ -18,7 +22,7 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     
-    - name: Setup Node.js
+    - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18'
@@ -26,30 +30,50 @@ jobs:
     - name: Install dependencies
       run: npm install
     
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v2
-    
-    - name: Install Android SDK components
-      run: |
-        sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
-        sdkmanager "ndk;23.1.7779620"
-    
-    - name: Grant execute permission for gradlew
+    - name: Make gradlew executable
       run: chmod +x android/gradlew
     
-    - name: Build Android Release
-      run: |
-        cd android
-        ./gradlew assembleRelease
+    - name: Build Blue APK
+      run: cd android && ./gradlew assembleBlueRelease
     
-    - name: Upload APK Blue
+    - name: Build Green APK
+      run: cd android && ./gradlew assembleGreenRelease
+    
+    - name: Build Red APK
+      run: cd android && ./gradlew assembleRedRelease
+    
+    - name: Build Purple APK
+      run: cd android && ./gradlew assemblePurpleRelease
+    
+    - name: Build Orange APK
+      run: cd android && ./gradlew assembleOrangeRelease
+    
+    - name: Upload Blue APK
       uses: actions/upload-artifact@v3
       with:
-        name: app-blue-release
-        path: android/app/build/outputs/apk/blue/release/app-blue-release.apk
+        name: PBo-Blue
+        path: android/app/build/outputs/apk/blue/release/*.apk
     
-    - name: Upload APK Green
+    - name: Upload Green APK
       uses: actions/upload-artifact@v3
       with:
-        name: app-green-release
-        path: android/app/build/outputs/apk/green/release/app-green-release.apk
+        name: PBo-Green
+        path: android/app/build/outputs/apk/green/release/*.apk
+    
+    - name: Upload Red APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: PBo-Red
+        path: android/app/build/outputs/apk/red/release/*.apk
+    
+    - name: Upload Purple APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: PBo-Purple
+        path: android/app/build/outputs/apk/purple/release/*.apk
+    
+    - name: Upload Orange APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: PBo-Orange
+        path: android/app/build/outputs/apk/orange/release/*.apk
